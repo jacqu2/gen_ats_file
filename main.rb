@@ -1,0 +1,97 @@
+# ATS Table Generator
+# Generates Table File to test ATS capability
+# Author: Jacqueline Smedley
+# Created :10/26/21
+# Last Modified: 11/02/21
+require 'date'
+require 'colorize'
+require 'io/console'
+
+#################### converts input time to epoch time in 32-bit seconds#########################
+# parameter is string execution date/time (MM/DD/YYYY HH:MM:SS)
+def conv_epoch(input_time)
+  #create a new date/time object (conv to unix time)
+  fsw_epoch_year = 1980 
+  calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i - Time.new(fsw_epoch_year.to_i, 01, 01, 00, 00, 00).to_i
+
+  #use following line instead of other calc_time for unix epoch (1970)
+  #calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i 
+
+  # convert to hex
+  time_hex = calc_time.to_s(16)
+
+  debug = Time.at(calc_time)
+  puts "Time in Hex: #{time_hex}"
+  puts "Readable Time: #{debug}"
+  return time_hex
+end
+#################################################################################################
+
+#################### writes hex contents of file to string ######################################
+def hex_file_to_str(fname)
+  #read the binary
+  file_in = File.binread(fname)
+
+  #convert to hex
+  hex_file = file_in.unpack('H*')[0]
+  hex_file_scan = hex_file.scan /.{1,2}/
+
+  #save to string
+  i = 0
+  data = ''
+  hex_file_scan.each do |byte|
+    data += byte
+  end  
+  return data
+end
+#################################################################################################
+
+#################### writes hex string to binary file ######################################
+def hex_str_to_bin(str_in, filename_out)
+  str_in.scan(/../).map { |b| b.to_i(16) }.pack('C*')
+  IO.binwrite(filename_out, str_in)
+
+end
+#################################################################################################
+
+puts "please enter full path (.tbl file): "
+file_in = gets.chomp
+file_out = file_in + "-r1"
+#puts "please enter time to execute commands (MM/DD/YYYY HH:MM:SS): "
+#time_in = gets.chomp
+
+#epoch and hex time conversion
+time_converted = conv_epoch("11/03/2021 10:15:44")
+
+#save hex contents of file to string
+str_data = hex_file_to_str(file_in)
+
+#find time locations
+i = 0
+time_indx = []
+str_data.each_char do |char|
+  if char == "1" && str_data[i + 1, 3] == "898"
+    if i - 8 >= 0
+      time_indx << i - 8      
+    end
+  end
+  i = i + 1
+end
+
+puts "Original hex:"
+puts str_data[0, 500]
+puts ""
+puts "Hex with modified times: "
+
+# replace times in string
+time_indx.each do |index|
+  str_data[index, 8] = time_converted.to_s.red
+end
+
+puts str_data[0, 500]
+
+hex_str_to_bin(str_data, file_out)
+
+#debug
+File.open("sc_ats1.tbl-r1")
+hex_file_to_str("sc_ats1.tbl-r1")
