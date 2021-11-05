@@ -48,9 +48,9 @@ end
 
 #################### writes hex string to binary file ######################################
 def hex_str_to_bin(str_in, filename_out)
-  str_in.scan(/../).map { |b| b.to_i(16) }.pack('C*')
-  IO.binwrite(filename_out, str_in)
-
+  packed = Array(str_in).pack('H*')
+  File.binwrite("sc_ats1.tbl-r1", packed)
+  #could try normal write
 end
 #################################################################################################
 
@@ -85,11 +85,15 @@ puts "Hex with modified times: "
 
 # replace times in string
 time_indx.each do |index|
-  str_data[index, 8] = time_converted.to_s.red
+  str_data[index, 8] = time_converted.to_s
 end
 
 puts str_data[0, 500]
 
+#convert to binary
+
+
+array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
 
 #debug
