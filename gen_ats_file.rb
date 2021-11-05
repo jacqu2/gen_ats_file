@@ -1,10 +1,9 @@
 # ATS Table Generator
 # Generates Table File to test ATS capability
 # Author: Jacqueline Smedley
-# Created :10/26/21
+# Created :11/05/21
 # Last Modified: 11/02/21
 require 'date'
-require 'colorize'
 require 'io/console'
 
 #################### converts input time to epoch time in 32-bit seconds#########################
@@ -50,18 +49,17 @@ end
 def hex_str_to_bin(str_in, filename_out)
   packed = Array(str_in).pack('H*')
   File.binwrite("sc_ats1.tbl-r1", packed)
-  #could try normal write
 end
 #################################################################################################
 
 puts "please enter full path (.tbl file): "
 file_in = gets.chomp
 file_out = file_in + "-r1"
-#puts "please enter time to execute commands (MM/DD/YYYY HH:MM:SS): "
-#time_in = gets.chomp
+puts "please enter time to execute commands (MM/DD/YYYY HH:MM:SS): "
+time_in = gets.chomp
 
 #epoch and hex time conversion
-time_converted = conv_epoch("11/03/2021 10:15:44")
+time_converted = conv_epoch(time_in)
 
 #save hex contents of file to string
 str_data = hex_file_to_str(file_in)
@@ -78,24 +76,17 @@ str_data.each_char do |char|
   i = i + 1
 end
 
-puts "Original hex:"
-puts str_data[0, 500]
-puts ""
-puts "Hex with modified times: "
+#puts "Original hex:"
+#puts str_data[0, 500]
+#puts ""
+#puts "Hex with modified times: "
 
 # replace times in string
 time_indx.each do |index|
   str_data[index, 8] = time_converted.to_s
 end
 
-puts str_data[0, 500]
-
-#convert to binary
-
+#puts str_data[0, 500]
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
-
-#debug
-File.open("sc_ats1.tbl-r1")
-hex_file_to_str("sc_ats1.tbl-r1")
