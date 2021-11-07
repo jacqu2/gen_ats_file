@@ -11,6 +11,7 @@ require 'io/console'
 def conv_epoch(input_time)
   #create a new date/time object (conv to unix time)
   fsw_epoch_year = 1980 
+  # input time in seconds since 1970 - seconds between 1970 and fsw epoch, gives input time in seconds since fsw epoch
   calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i - Time.new(fsw_epoch_year.to_i, 01, 01, 00, 00, 00).to_i
 
   #use following line instead of other calc_time for unix epoch (1970)
