@@ -52,15 +52,49 @@ def hex_str_to_bin(str_in, filename_out)
   File.binwrite("sc_ats1.tbl-r1", packed)
 end
 #################################################################################################
+time_invalid = 1
+filename_invalid = 1
 
-puts "please enter full path (.tbl file): "
-file_in = gets.chomp
+while filename_invalid == 1
+  puts "please enter filename (.tbl file): "
+  file_in = gets.chomp
+
+  #check for valid time format
+  if !File.exist?('sc_ats1.tbl')
+    puts "ERROR: File does not exist, please try again"  
+  else
+    filename_invalid = 0
+  end
+end
+
+
+while time_invalid == 1
+  puts "please enter time to execute commands (MM/DD/YYYY HH:MM:SS): "
+  input_time = gets.chomp
+
+  #check for valid time format
+  if (input_time.length == "MM/DD/YYYY HH:MM:SS".length)
+    if input_time[6, 4].to_i < Time.now.year
+      puts "This date has already passed. Please try again ."
+    elsif input_time[0, 2].to_i < Time.now.month && input_time[6, 4].to_i <= Time.now.year
+      puts "This date has already passed. Please try again."      
+    elsif input_time[0, 2].to_i > 12 || input_time[0, 2].to_i < 1 || input_time[3, 2].to_i > 31 || input_time[3, 2].to_i < 1
+      puts "INVALID INPUT: date is not valid. Please try again."
+    elsif input_time[11, 2].to_i > 60 || input_time[11, 2].to_i < 0 || input_time[14, 2].to_i > 60 || input_time[14, 2].to_i < 0 || input_time[17, 2].to_i > 60 || input_time[17, 2].to_i < 0
+      puts "INVALID INPUT: time is not valid. Please try again."  
+    else
+      time_invalid = 0  
+    end
+  else
+    puts "INVALID FORMAT. Please try again (single digits should have leading zeros)"
+  end
+end
+
+
 file_out = file_in + "-r1"
-puts "please enter time to execute commands (MM/DD/YYYY HH:MM:SS): "
-time_in = gets.chomp
 
 #epoch and hex time conversion
-time_converted = conv_epoch(time_in)
+time_converted = conv_epoch(input_time)
 
 #save hex contents of file to string
 str_data = hex_file_to_str(file_in)
