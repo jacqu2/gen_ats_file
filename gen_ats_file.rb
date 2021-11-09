@@ -80,7 +80,7 @@ while time_invalid == 1
       puts "This date has already passed. Please try again."      
     elsif input_time[0, 2].to_i > 12 || input_time[0, 2].to_i < 1 || input_time[3, 2].to_i > 31 || input_time[3, 2].to_i < 1
       puts "INVALID INPUT: date is not valid. Please try again."
-    elsif input_time[11, 2].to_i > 60 || input_time[11, 2].to_i < 0 || input_time[14, 2].to_i > 60 || input_time[14, 2].to_i < 0 || input_time[17, 2].to_i > 60 || input_time[17, 2].to_i < 0
+    elsif input_time[11, 2].to_i > 24 || input_time[11, 2].to_i < 0 || input_time[14, 2].to_i > 60 || input_time[14, 2].to_i < 0 || input_time[17, 2].to_i > 60 || input_time[17, 2].to_i < 0
       puts "INVALID INPUT: time is not valid. Please try again."  
     else
       time_invalid = 0  
