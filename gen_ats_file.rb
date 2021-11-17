@@ -1,8 +1,8 @@
 # ATS Table Generator
 # Generates Table File to test ATS capability
 # Author: Jacqueline Smedley
-# Created :11/05/21
-# Last Modified: 11/02/21
+# Created :11/02/21
+# Last Modified: 11/17/21
 require 'date'
 require 'io/console'
 
@@ -11,7 +11,7 @@ require 'io/console'
 def conv_epoch(input_time)
   #create a new date/time object (conv to unix time)
   fsw_epoch_year = 1980 
-  # input time in seconds since 1970 - seconds between 1970 and fsw epoch, gives input time in seconds since fsw epoch
+  # (input time in seconds since 1970 - seconds between 1970 and fsw epoch), gives input time in seconds since fsw epoch
   calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i - Time.new(fsw_epoch_year.to_i, 01, 01, 00, 00, 00).to_i
 
   #use following line instead of other calc_time for unix epoch (1970)
@@ -52,6 +52,26 @@ def hex_str_to_bin(str_in, filename_out)
   File.binwrite("sc_ats1.tbl-r1", packed)
 end
 #################################################################################################
+
+############# generates an array of n timestamps a given amount of seconds apart ################
+# inputs are number of timestamps to be generated, interval between each timestamp, and the start
+# timestamp (output of conv_epoch method)
+def gen_timestamps(num_timestamps, seconds_apart, start_timestamp)
+  i = 1
+  times_array = []
+
+  # generate first timestamp
+  times_array[0] = (start_timestamp.to_i + seconds_apart).to_s(16)
+
+  # generate remaining timestamps
+  while i < num_timestamps
+    times_array[i] = (times_array[i - 1].to_i + seconds_apart).to_s(16)
+    i = i + 1
+  end
+  puts times_array
+end
+#################################################################################################
+
 time_invalid = 1
 filename_invalid = 1
 
