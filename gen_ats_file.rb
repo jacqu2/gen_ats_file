@@ -6,6 +6,14 @@
 require 'date'
 require 'io/console'
 
+######################### converts time input string to unix timestamp integer ##################
+# parameter is string execution date/time (MM/DD/YYYY HH:MM:SS)
+def time_str_to_unix(input_time)
+  calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i
+  return calc_time
+end
+#################################################################################################
+
 #################### converts input time to epoch time in 32-bit seconds#########################
 # parameter is string execution date/time (MM/DD/YYYY HH:MM:SS)
 def conv_epoch(input_time)
@@ -59,7 +67,7 @@ end
 def gen_timestamps(num_timestamps, seconds_apart, start_timestamp)
   i = 1
   times_array = []
-
+  puts "starting timestamp is #{start_timestamp}"
   # generate first timestamp
   times_array[0] = (start_timestamp.to_i + seconds_apart).to_s(16)
 
@@ -69,6 +77,7 @@ def gen_timestamps(num_timestamps, seconds_apart, start_timestamp)
     i = i + 1
   end
   puts times_array
+  return times_array
 end
 #################################################################################################
 
@@ -115,6 +124,7 @@ file_out = file_in + "-r1"
 
 #epoch and hex time conversion
 time_converted = conv_epoch(input_time)
+timestamps_array = gen_timestamps(4, 5, time_converted)
 
 #save hex contents of file to string
 str_data = hex_file_to_str(file_in)
