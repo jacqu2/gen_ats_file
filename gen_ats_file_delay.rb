@@ -5,7 +5,6 @@
 # Last Modified: 11/23/21
 require 'date'
 require 'io/console'
-require 'tzinfo'
 
 ############################## calculates start time given current time and offset###############
 def calc_start_time(time_delay)
