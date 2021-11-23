@@ -105,6 +105,9 @@ while time_invalid == 1
   end
 end
 
+puts "How many seconds between each command?: "
+time_btwn_cmds = gets.chomp
+
 file_out = file_in + "-r1"
 
 # epoch and hex time conversion
@@ -128,12 +131,18 @@ str_data.each_char do |char|
 end
 
 # generate timestamps
-ts_array = gen_timestamps(num_cmds, 5, input_time)
+timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
 
 # replace times in string
+array_indx = 0
 time_indx.each do |index|
-  str_data[index, 8] = time_converted.to_s
+  str_data[index, 8] = timestamps_array[array_indx].to_s
+  array_indx = array_indx + 1
 end
+
+#time_indx.each do |index|
+#  str_data[index, 8] = time_converted.to_s
+#end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
