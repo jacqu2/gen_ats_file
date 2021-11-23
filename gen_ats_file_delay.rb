@@ -28,7 +28,7 @@ def conv_epoch(input_time)
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
-  puts "Readable Time (unix): #{debug}, time_hex: #{time_hex}"
+  puts "Readable Time (unix): #{debug}, time_hex: #{time_hex}, raw seconds: #{calc_time}"
   return time_hex
 end
 #################################################################################################
