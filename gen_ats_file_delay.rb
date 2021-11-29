@@ -33,11 +33,11 @@ def conv_epoch(input_time)
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
-  puts "Readable Time (unix): #{debug}"
-  puts "Unix start time in raw seconds: #{input_time.to_i}"
-  puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
-  puts "Epoch start time in raw seconds: #{calc_time}"
-  puts "Epoch start time in hex: #{time_hex}"
+  #puts "Readable Time (unix): #{debug}"
+  #puts "Unix start time in raw seconds: #{input_time.to_i}"
+  #puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
+  #puts "Epoch start time in raw seconds: #{calc_time}"
+  #puts "Epoch start time in hex: #{time_hex}"
   return time_hex
 end
 #################################################################################################
