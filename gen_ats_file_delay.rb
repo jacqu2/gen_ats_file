@@ -10,7 +10,8 @@ require 'io/console'
 def calc_start_time(time_delay)
   hours = time_delay[0, 2].to_i
   minutes = time_delay[3, 2].to_i
-  seconds = time_delay[6, 2].to_i
+  seconds = time_delay[6, 2].to_i + 10
+  # add 10s offset for user input entry delay
   time_offset = Time.now + hours*60*60 + minutes*60 + seconds
   puts "TIME_NOW is #{Time.now.to_i}"
   puts "The first ATS command will run at #{time_offset.to_i}"
