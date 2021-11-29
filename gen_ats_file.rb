@@ -2,14 +2,23 @@
 # Generates Table File to test ATS capability
 # Author: Jacqueline Smedley
 # Created :11/02/21
-# Last Modified: 11/17/21
+# Last Modified: 11/23/21
 require 'date'
 require 'io/console'
+require 'tzinfo'
 
 ######################### converts time input string to unix timestamp integer ##################
 # parameter is string execution date/time (MM/DD/YYYY HH:MM:SS)
 def time_str_to_unix(input_time)
   calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i
+  
+  #convert from EST to UTC
+  time_utc = TZInfo::Timezone.get('US/Eastern').local_to_utc(calc_time)
+  puts "time zone: #{time_utc}"
+  timestamp = time_utc.to_s
+  debug = Time.at(calc_time)
+  puts "NEW Time in Hex: #{timestamp}"
+  puts "NEW Readable Time: #{debug}"
   return calc_time
 end
 #################################################################################################
@@ -20,17 +29,24 @@ def conv_epoch(input_time)
   #create a new date/time object (conv to unix time)
   fsw_epoch_year = 1980 
   # (input time in seconds since 1970 - seconds between 1970 and fsw epoch), gives input time in seconds since fsw epoch
-  calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i - Time.new(fsw_epoch_year.to_i, 01, 01, 00, 00, 00).to_i
-
+  #calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i - Time.new(fsw_epoch_year.to_i, 01, 01, 00, 00, 00).to_i
+  
   #use following line instead of other calc_time for unix epoch (1970)
   #calc_time = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i 
 
+  #convert from EST to UTC
+  time_est = Time.new(input_time[6, 4].to_i, input_time[0, 2].to_i, input_time[3, 2].to_i, input_time[11, 2].to_i, input_time[14, 2].to_i, input_time[17, 2].to_i).to_i
+  time_utc = TZInfo::Timezone.get('US/Eastern').local_to_utc(time_est)
+  time_hex = time_utc.to_s(16)
+  calc_time = time_est - Time.new(fsw_epoch_year.to_i, 01, 01, 00, 00, 00).to_i
+
   # convert to hex
-  time_hex = calc_time.to_s(16)
+  #time_hex = calc_time.to_s(16)
 
   debug = Time.at(calc_time)
   puts "Time in Hex: #{time_hex}"
   puts "Readable Time: #{debug}"
+  puts ".utc: #{utc_test}"
   return time_hex
 end
 #################################################################################################
@@ -123,6 +139,7 @@ end
 file_out = file_in + "-r1"
 
 #epoch and hex time conversion
+time_test = time_str_to_unix(input_time)
 time_converted = conv_epoch(input_time)
 timestamps_array = gen_timestamps(4, 5, time_converted)
 
@@ -141,17 +158,10 @@ str_data.each_char do |char|
   i = i + 1
 end
 
-#puts "Original hex:"
-#puts str_data[0, 500]
-#puts ""
-#puts "Hex with modified times: "
-
 # replace times in string
 time_indx.each do |index|
   str_data[index, 8] = time_converted.to_s
 end
-
-#puts str_data[0, 500]
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
