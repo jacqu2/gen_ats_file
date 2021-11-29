@@ -20,11 +20,11 @@ end
 #################### converts input time to epoch time in 32-bit seconds#########################
 # parameter is start time object
 def conv_epoch(input_time)
-  # (input time in seconds since 1970 - 1980 unix timestamp), gives input time in seconds since 1980 epoch
-  calc_time = input_time.to_i - 315532800
+  # (input time in seconds since 1970 - 1980 unix timestamp), gives input time in seconds since Jan 6th 1980 epoch
+  # calc_time = input_time.to_i - 315896400
 
   #use following line instead of other calc_time for unix epoch (1970)
-  #calc_time = input_time.to_i
+  calc_time = input_time.to_i
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
