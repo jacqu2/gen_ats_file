@@ -21,14 +21,22 @@ end
 # parameter is start time object
 def conv_epoch(input_time)
   # (input time in seconds since 1970 - 1980 unix timestamp), gives input time in seconds since Jan 1st 1980 epoch
-  calc_time = input_time.to_i - 315550800
+  epoch_year = 1980
+  epoch_day = 01
+  epoch_month = 01
+  epoch_offset = Time.new(epoch_year, epoch_month, epoch_day).to_i
+  calc_time = input_time.to_i - epoch_offset
 
   #use following line instead of other calc_time for unix epoch (1970)
   #calc_time = input_time.to_i
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
-  puts "Readable Time (unix): #{debug}, time_hex: #{time_hex}, raw seconds: #{calc_time}"
+  puts "Readable Time (unix): #{debug}"
+  puts "Unix start time in raw seconds: #{input_time.to_i}"
+  puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
+  puts "Epoch start time in raw seconds: #{calc_time}"
+  puts "Epoch start time in hex: #{time_hex}"
   return time_hex
 end
 #################################################################################################
