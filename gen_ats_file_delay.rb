@@ -13,7 +13,7 @@ def calc_start_time(time_delay)
   seconds = time_delay[6, 2].to_i + 10
   # add 10s offset for user input entry delay
   time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds
-  puts "TIME_NOW is #{Time.now.to_i}"
+  # puts "TIME_NOW is #{Time.now.to_i}"
   puts "The first ATS command will run at #{time_offset.to_i}"
   return time_offset
 end
@@ -35,9 +35,9 @@ def conv_epoch(input_time)
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
-  #puts "Readable Time (unix): #{debug}"
-  puts "Unix start time in raw seconds: #{input_time.to_i}"
-  #puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
+  # puts "Readable Time (unix): #{debug}"
+  # puts "Unix start time in raw seconds: #{input_time.to_i}"
+  # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
   puts "Epoch start time in raw seconds: #{calc_time}"
   puts "Epoch start time in hex: #{time_hex}"
   return time_hex
@@ -141,19 +141,19 @@ puts "How many seconds between each command?: "
 time_btwn_cmds = gets.chomp
 
 # generate timestamps
-# timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
+timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
 
 # replace times in string
-#array_indx = 0
-#time_indx.each do |index|
-#  str_data[index, 8] = timestamps_array[array_indx].to_s
-#  array_indx = array_indx + 1
-#end
-
+array_indx = 0
 time_indx.each do |index|
-  str_data[index, 8] = time_converted
-  puts "put #{time_converted} in file"
+  str_data[index, 8] = timestamps_array[array_indx].to_s
+  array_indx = array_indx + 1
 end
+
+# time_indx.each do |index|
+#   str_data[index, 8] = time_converted
+#   puts "put #{time_converted} in file"
+# end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
