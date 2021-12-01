@@ -101,6 +101,10 @@ while filename_invalid == 1
   end
 end
 
+#save hex contents of file to string
+str_data = hex_file_to_str(file_in)
+
+file_out = file_in + "-r2"
 
 while time_invalid == 1
   puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
@@ -108,23 +112,16 @@ while time_invalid == 1
 
   #check for valid time format
   if (time_offset.length == "HH:MM:SS".length)
+    #parse input and convert to timestamp
     input_time = calc_start_time(time_offset)
+
+    # epoch and hex time conversion
+    time_converted = conv_epoch(input_time)
     time_invalid = 0
   else
     puts "INVALID FORMAT. Please try again (single digits should have leading zeros)"
   end
 end
-
-puts "How many seconds between each command?: "
-time_btwn_cmds = gets.chomp
-
-file_out = file_in + "-r2"
-
-# epoch and hex time conversion
-time_converted = conv_epoch(input_time)
-
-#save hex contents of file to string
-str_data = hex_file_to_str(file_in)
 
 #find time locations and number of commands
 i = 0
@@ -140,8 +137,11 @@ str_data.each_char do |char|
   i = i + 1
 end
 
+puts "How many seconds between each command?: "
+time_btwn_cmds = gets.chomp
+
 # generate timestamps
-timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
+# timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
 
 # replace times in string
 #array_indx = 0
