@@ -66,7 +66,7 @@ end
 #################### writes hex string to binary file ######################################
 def hex_str_to_bin(str_in, filename_out)
   packed = Array(str_in).pack('H*')
-  File.binwrite("sc_ats1.tbl-r1", packed)
+  File.binwrite(filename_out, packed)
 end
 #################################################################################################
 
@@ -152,7 +152,7 @@ time_btwn_cmds = gets.chomp
 
 time_indx.each do |index|
   str_data[index, 8] = time_converted
-  puts "put #{time_converted.to_s} in file"
+  puts "put #{time_converted} in file"
 end
 
 array = str_data.split("")
