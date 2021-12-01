@@ -12,7 +12,7 @@ def calc_start_time(time_delay)
   minutes = time_delay[3, 2].to_i
   seconds = time_delay[6, 2].to_i + 10
   # add 10s offset for user input entry delay
-  time_offset = Time.now + hours*60*60 + minutes*60 + seconds
+  time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds + 
   puts "TIME_NOW is #{Time.now.to_i}"
   puts "The first ATS command will run at #{time_offset.to_i}"
   return time_offset
@@ -27,7 +27,7 @@ def conv_epoch(input_time)
   epoch_day = 01
   epoch_month = 01
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day).to_i
-  calc_time = input_time.to_i - epoch_offset + 17340 #time diff between telemetry and tool
+  calc_time = input_time.to_i - epoch_offset #time diff between telemetry and tool
 
   #use following line instead of other calc_time for unix epoch (1970)
   #calc_time = input_time.to_i
