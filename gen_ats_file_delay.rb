@@ -104,7 +104,7 @@ end
 #save hex contents of file to string
 str_data = hex_file_to_str(file_in)
 
-file_out = file_in + "-r2"
+file_out = file_in + "-r1"
 
 while time_invalid == 1
   puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
@@ -157,3 +157,4 @@ end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
+puts "ATS file saved under filename #{fname_out}"
