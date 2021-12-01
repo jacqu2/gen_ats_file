@@ -15,12 +15,12 @@ def calc_start_time(time_delay)
   time_offset = Time.now + hours*60*60 + minutes*60 + seconds
   puts "TIME_NOW is #{Time.now.to_i}"
   puts "The first ATS command will run at #{time_offset.to_i} seconds"
-  return time_offset
+  return time_offset.to_i
 end
 #################################################################################################
 
 #################### converts input time to epoch time in 32-bit seconds#########################
-# parameter is start time object
+# parameter is start timestamp
 def conv_epoch(input_time)
   # (input time in seconds since 1970 - 1980 unix timestamp), gives input time in seconds since Jan 1st 1980 epoch
   epoch_year = 1980
