@@ -27,8 +27,7 @@ def conv_epoch(input_time)
   epoch_day = 01
   epoch_month = 01
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day).to_i
-  gmt_offset = 18000
-  calc_time = input_time.to_i - epoch_offset + gmt_offset #time diff between telemetry and tool
+  calc_time = input_time.to_i - epoch_offset 
 
   #use following line instead of other calc_time for unix epoch (1970)
   #calc_time = input_time.to_i
