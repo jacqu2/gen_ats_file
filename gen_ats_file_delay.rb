@@ -39,7 +39,7 @@ def conv_epoch(input_time)
   # puts "Unix start time in raw seconds: #{input_time.to_i}"
   # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
   # puts "Epoch start time in raw seconds: #{calc_time}"
-  puts "Epoch start time in hex: #{time_hex}"
+  # puts "Epoch start time in hex: #{time_hex}"
   return time_hex
 end
 #################################################################################################
@@ -81,7 +81,7 @@ def gen_timestamps(num_cmds, seconds_apart, start_time_object)
     times_array[i] = conv_epoch(start_time_object + seconds_apart*(i + 1))
     i = i + 1
   end
-  puts times_array
+  puts "Command execution times: #{times_array}"
   return times_array
 end
 #################################################################################################
