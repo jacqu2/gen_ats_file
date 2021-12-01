@@ -144,15 +144,16 @@ end
 timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
 
 # replace times in string
-array_indx = 0
-time_indx.each do |index|
-  str_data[index, 8] = timestamps_array[array_indx].to_s
-  array_indx = array_indx + 1
-end
-
+#array_indx = 0
 #time_indx.each do |index|
-#  str_data[index, 8] = time_converted.to_s
+#  str_data[index, 8] = timestamps_array[array_indx].to_s
+#  array_indx = array_indx + 1
 #end
+
+time_indx.each do |index|
+  str_data[index, 8] = time_converted.to_s
+  puts "put #{time_converted.to_s} in file"
+end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
