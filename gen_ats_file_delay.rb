@@ -151,7 +151,7 @@ time_btwn_cmds = gets.chomp
 #end
 
 time_indx.each do |index|
-  str_data[index, 8] = time_converted.to_s
+  str_data[index, 8] = time_converted
   puts "put #{time_converted.to_s} in file"
 end
 
