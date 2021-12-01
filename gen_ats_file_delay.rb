@@ -14,7 +14,7 @@ def calc_start_time(time_delay)
   # add 10s offset for user input entry delay
   time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds
   # puts "TIME_NOW is #{Time.now.to_i}"
-  puts "The first ATS command will run at #{time_offset.to_i}"
+  # puts "The first ATS command will run at #{time_offset.to_i}"
   return time_offset
 end
 #################################################################################################
@@ -38,7 +38,7 @@ def conv_epoch(input_time)
   # puts "Readable Time (unix): #{debug}"
   # puts "Unix start time in raw seconds: #{input_time.to_i}"
   # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
-  puts "Epoch start time in raw seconds: #{calc_time}"
+  # puts "Epoch start time in raw seconds: #{calc_time}"
   puts "Epoch start time in hex: #{time_hex}"
   return time_hex
 end
