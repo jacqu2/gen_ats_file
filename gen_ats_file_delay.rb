@@ -150,6 +150,9 @@ time_indx.each do |index|
   array_indx = array_indx + 1
 end
 
+# replace checksum
+str_data[time_indx[0]] == "BE"
+
 # time_indx.each do |index|
 #   str_data[index, 8] = time_converted
 #   puts "put #{time_converted} in file"
@@ -157,4 +160,4 @@ end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
-puts "ATS file saved under filename #{fname_out}"
+puts "ATS file saved under filename #{file_out}"
