@@ -127,10 +127,12 @@ end
 i = 0
 num_cmds = 0
 time_indx = []
+xsum_indx = []
 str_data.each_char do |char|
   if char == "1" && str_data[i + 1, 3] == "898"
     if i - 8 >= 0
       time_indx << i - 8   
+      xsum_indx << i + 14
       num_cmds = num_cmds + 1   
     end
   end
@@ -151,7 +153,7 @@ time_indx.each do |index|
 end
 
 # replace checksum
-str_data[time_indx[0]] == "BE"
+str_data[xsum_indx[0]] == "BE"
 
 # time_indx.each do |index|
 #   str_data[index, 8] = time_converted
