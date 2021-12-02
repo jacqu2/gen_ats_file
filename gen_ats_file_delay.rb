@@ -153,7 +153,7 @@ time_indx.each do |index|
 end
 
 # replace checksum
-str_data[xsum_indx[0]] == "BE"
+str_data[xsum_indx[0],2] = "be"
 
 # time_indx.each do |index|
 #   str_data[index, 8] = time_converted
@@ -162,4 +162,5 @@ str_data[xsum_indx[0]] == "BE"
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
+puts str_data
 puts "ATS file saved under filename #{file_out}"
