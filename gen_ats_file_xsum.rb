@@ -124,57 +124,37 @@ while time_invalid == 1
   end
 end
 
-#find time locations and number of commands
-# first cmd location fixed
-#if str_data[235, 2] == "01"
+# find location of each cmd
 time_indx = []
 xsum_indx = []
 len_indx = []
+lengths = []
 next_cmd_num = "01"
 num_cmds = 0
-next_cmd_indx = 0
+next_cmd_indx = 234
 i = 0
 
+if str_data[next_cmd_indx, 2] != "01"
+  puts "First command not in expected location, other data will be incorrect."
+end  
+
 while(1)
-  puts "CMD NUM: #{next_cmd_num}"
-  if next_cmd_num == "01"
-    time_indx[i] = 236
-  elsif str_data[next_cmd_indx, 2].hex == next_cmd_num
-    time_indx[i] = xsum_indx[i - 1] + 4
+  if str_data[next_cmd_indx, 2].hex.to_i == next_cmd_num.to_i
+    time_indx[i] = next_cmd_indx + 2
+    len_indx[i] = next_cmd_indx + 18
+    lengths[i] = str_data[len_indx[i], 4]
+    len = str_data[len_indx[i], 4].hex + 1
+    xsum_indx[i] = len_indx[i] + 4 + ((len * 2) - 2)
+    puts "xsum #{i + 1} is #{str_data[xsum_indx[i], 2]}"
+    next_cmd_indx = xsum_indx[i] + 4
+    next_cmd_num = (next_cmd_num.hex + 1).to_s
+    i = i + 1
+    num_cmds = num_cmds + 1
   else
     break
   end
-  
-  len_indx[i] = time_indx[i] + 16
-  len = str_data[len_indx[i], 4].hex + 1
-  xsum_indx[i] = len_indx[i] + 4 + len
-  next_cmd_indx = xsum_indx[i] + 4
-  next_cmd_num = next_cmd_num + 1
-  i = i + 1
-  num_cmds = num_cmds + 1
-  puts "NEXT CMD NUM: #{next_cmd_num}"
-  puts "NEXT CMD IN FILE: #{str_data[next_cmd_indx, 2].hex}"
 end
 
-#else
-#  puts "First command not in expected location, other data will be off"
-#end  
-
-
-# i = 0
-# num_cmds = 0
-# time_indx = []
-# xsum_indx = []
-# str_data.each_char do |char|
-#   if char == "1" && str_data[i + 1, 3] == "898"
-#     if i - 8 >= 0
-#       time_indx << i - 8   
-#       xsum_indx << i + 4
-#       num_cmds = num_cmds + 1   
-#     end
-#   end
-#   i = i + 1
-# end
 
 puts "How many seconds between each command?: "
 time_btwn_cmds = gets.chomp
@@ -188,33 +168,29 @@ array_indx = 0
 time_indx.each do |index|
   i = 0
   str_data[index, 8] = timestamps_array[array_indx].to_s
+end
 
-  # calculate checksum
-  xsum = 1
-  test = "FF".hex ^ "80".hex
-  #puts test.to_s(16)
-  i = xsum_indx[array_indx]
+i_cmd = 0
+# calculate checksum for each command
+while i_cmd < num_cmds
+  i = 0
   xsum = "FF"
-  while i <= xsum_indx[array_indx] + 10
-    puts "computing xor of #{xsum} and #{str_data[i, 2]}"
+  # 2 bytes ID, 2 bytes c0 00, 2 bytes length, n bytes data, 1 byte xsum
+  numel_xsum = 12 + lengths[i_cmd].hex
+
+  # xor all bits from ID to checksum
+  while i <= numel_xsum
+    puts "xor-ing #{xsum.to_s.hex} and #{str_data[i, 2].hex}"
     xsum = xsum.to_s.hex ^ str_data[i, 2].hex
     xsum = xsum.to_s(16)
-    puts "AHHHHHHHHHHH #{xsum}"
     i = i + 2
   end
-  xsum_array[array_indx] = xsum ^ xsum
-  array_indx = array_indx + 1
+  i_cmd = i_cmd + 1
 end
 
 
 # replace checksum
 # str_data[xsum_indx[0],2] = "be"
-
-
-# time_indx.each do |index|
-#   str_data[index, 8] = time_converted
-#   puts "put #{time_converted} in file"
-# end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
