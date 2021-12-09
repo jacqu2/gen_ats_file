@@ -51,6 +51,7 @@ def hex_file_to_str(fname)
 
   #convert to hex
   hex_file = file_in.unpack('H*')[0]
+  bin_str = file_in.unpack('B*')[0]
   hex_file_scan = hex_file.scan /.{1,2}/
 
   #save to string
@@ -132,7 +133,7 @@ str_data.each_char do |char|
   if char == "1" && str_data[i + 1, 3] == "898"
     if i - 8 >= 0
       time_indx << i - 8   
-      xsum_indx << i + 14
+      xsum_indx << i + 4
       num_cmds = num_cmds + 1   
     end
   end
@@ -145,15 +146,34 @@ time_btwn_cmds = gets.chomp
 # generate timestamps
 timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
 
-# replace times in string
+# replace times in string, calculate each checksum
+xsum_array = []
 array_indx = 0
 time_indx.each do |index|
+  i = 0
   str_data[index, 8] = timestamps_array[array_indx].to_s
+
+  # calculate checksum
+  xsum = 1
+  test = "FF".hex ^ "80".hex
+  #puts test.to_s(16)
+  i = xsum_indx[array_indx]
+  xsum = "FF"
+  while i <= xsum_indx[array_indx] + 10
+    puts "computing xor of #{xsum} and #{str_data[i, 2]}"
+    xsum = xsum.to_s.hex ^ str_data[i, 2].hex
+    xsum = xsum.to_s(16)
+    puts "AHHHHHHHHHHH #{xsum}"
+    i = i + 2
+  end
+  xsum_array[array_indx] = xsum ^ xsum
   array_indx = array_indx + 1
 end
 
+
 # replace checksum
-str_data[xsum_indx[0],2] = "be"
+# str_data[xsum_indx[0],2] = "be"
+
 
 # time_indx.each do |index|
 #   str_data[index, 8] = time_converted
@@ -162,5 +182,4 @@ str_data[xsum_indx[0],2] = "be"
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
-puts str_data
 puts "ATS file saved under filename #{file_out}"
