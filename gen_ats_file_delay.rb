@@ -1,4 +1,4 @@
-# ATS Table Generator
+# ATS Table Generator (OUT OF DATE, see gen_ats_file_not_general.rb or gen_ats_file_xsum.rb)
 # Generates Table File to test ATS capability
 # Author: Jacqueline Smedley
 # Created :11/02/21

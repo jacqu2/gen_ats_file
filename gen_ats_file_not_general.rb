@@ -1,8 +1,11 @@
-# ATS Table Generator
+# ATS Table Generator for sc_ats1.tbl
 # Generates Table File to test ATS capability
+# modifies command execution times and fixes checksums
+# WORKS ONLY FOR sc_ats1.tbl, NOT GENERAL
+# for general ats file generator, see gen_ats_file_xsum.rb
 # Author: Jacqueline Smedley
 # Created :11/02/21
-# Last Modified: 11/23/21
+# Last Modified: 12/09/21
 require 'date'
 require 'io/console'
 
@@ -152,15 +155,13 @@ time_indx.each do |index|
   array_indx = array_indx + 1
 end
 
-# replace checksum
-str_data[xsum_indx[0],2] = "be"
-
-# time_indx.each do |index|
-#   str_data[index, 8] = time_converted
-#   puts "put #{time_converted} in file"
-# end
+# replace checksums in string
+xsum_array_indx = 0
+xsum_indx.each do |index|
+  str_data[index, 2] = "BE"
+  xsum_array_indx = xsum_array_indx + 1
+end
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
-puts str_data
 puts "ATS file saved under filename #{file_out}"
