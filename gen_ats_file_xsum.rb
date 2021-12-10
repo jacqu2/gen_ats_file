@@ -145,7 +145,6 @@ while(1)
     lengths[i] = str_data[len_indx[i], 4]
     len = str_data[len_indx[i], 4].hex + 1
     xsum_indx[i] = len_indx[i] + 4 + ((len * 2) - 2)
-    puts "xsum #{i + 1} is #{str_data[xsum_indx[i], 2]}"
     next_cmd_indx = xsum_indx[i] + 4
     next_cmd_num = (next_cmd_num.hex + 1).to_s
     i = i + 1
@@ -186,10 +185,8 @@ while i_cmd < num_cmds
   # puts "xsum for cmd #{i_cmd} is #{xsum}"
   str_data[xsum_indx[i_cmd], 2] = xsum
   i_cmd = i_cmd + 1
-  puts "xsum #{i_cmd}: #{xsum}"
+  puts "checksum #{i_cmd}: #{xsum}"
 end
-
-puts xsum_indx
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
