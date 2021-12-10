@@ -180,11 +180,12 @@ while i_cmd < num_cmds
 
   # xor all bits from ID to checksum
   while i <= numel_xsum
-    puts "xor-ing #{xsum.to_s.hex} and #{str_data[i, 2].hex}"
-    xsum = xsum.to_s.hex ^ str_data[i, 2].hex
-    xsum = xsum.to_s(16)
+    puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
+    xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
     i = i + 2
   end
+  puts "xsum for cmd #{i_cmd} is #{xsum}"
+  str_data[xsum_indx[i_cmd], 2] = xsum
   i_cmd = i_cmd + 1
 end
 
