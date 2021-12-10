@@ -2,7 +2,7 @@
 # Generates Table File to test ATS capability, calculates and replaces checksum
 # Author: Jacqueline Smedley
 # Created :11/02/21
-# Last Modified: 12/07/21
+# Last Modified: 12/10/21
 require 'date'
 require 'io/console'
 
@@ -163,7 +163,6 @@ time_btwn_cmds = gets.chomp
 timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
 
 # replace times in string, calculate each checksum
-xsum_array = []
 array_indx = 0
 time_indx.each do |index|
   i = 0
@@ -180,18 +179,17 @@ while i_cmd < num_cmds
 
   # xor all bits from ID to checksum
   while i <= numel_xsum
-    puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
+    # puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
     i = i + 2
   end
-  puts "xsum for cmd #{i_cmd} is #{xsum}"
+  # puts "xsum for cmd #{i_cmd} is #{xsum}"
   str_data[xsum_indx[i_cmd], 2] = xsum
   i_cmd = i_cmd + 1
+  puts "xsum #{i_cmd}: #{xsum}"
 end
 
-
-# replace checksum
-# str_data[xsum_indx[0],2] = "be"
+puts xsum_indx
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)

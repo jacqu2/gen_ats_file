@@ -130,12 +130,10 @@ end
 i = 0
 num_cmds = 0
 time_indx = []
-xsum_indx = []
 str_data.each_char do |char|
   if char == "1" && str_data[i + 1, 3] == "898"
     if i - 8 >= 0
       time_indx << i - 8   
-      xsum_indx << i + 14
       num_cmds = num_cmds + 1   
     end
   end
@@ -156,11 +154,10 @@ time_indx.each do |index|
 end
 
 # replace checksums in string
-xsum_array_indx = 0
-xsum_indx.each do |index|
-  str_data[index, 2] = "BE"
-  xsum_array_indx = xsum_array_indx + 1
-end
+str_data[258, 2] = "be"
+str_data[290, 2] = "30"
+str_data[322, 2] = "30"
+str_data[350, 2] = "bf"
 
 array = str_data.split("")
 hex_str_to_bin(str_data, file_out)
