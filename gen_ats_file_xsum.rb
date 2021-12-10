@@ -1,5 +1,5 @@
 # ATS Table Generator
-# Generates Table File to test ATS capability, calculates and replaces checksum
+# Generates Table File to test ATS capability, calculates and replaces checksum and time
 # Author: Jacqueline Smedley
 # Created :11/02/21
 # Last Modified: 12/10/21
@@ -11,8 +11,8 @@ def calc_start_time(time_delay)
   hours = time_delay[0, 2].to_i
   minutes = time_delay[3, 2].to_i
   seconds = time_delay[6, 2].to_i + 10
-  # add 10s offset for user input entry delay
   time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds
+
   # puts "TIME_NOW is #{Time.now.to_i}"
   # puts "The first ATS command will run at #{time_offset.to_i}"
   return time_offset
@@ -35,6 +35,7 @@ def conv_epoch(input_time)
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
+
   # puts "Readable Time (unix): #{debug}"
   # puts "Unix start time in raw seconds: #{input_time.to_i}"
   # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
@@ -77,11 +78,13 @@ end
 def gen_timestamps(num_cmds, seconds_apart, start_time_object)
   i = 0
   times_array = []
+
   # generate timestamps
   while i < num_cmds
     times_array[i] = conv_epoch(start_time_object + seconds_apart*(i + 1))
     i = i + 1
   end
+
   puts "Command execution times: #{times_array}"
   return times_array
 end
@@ -168,11 +171,12 @@ time_indx.each do |index|
   str_data[index, 8] = timestamps_array[array_indx].to_s
 end
 
-i_cmd = 0
 # calculate checksum for each command
+i_cmd = 0
 while i_cmd < num_cmds
   i = 0
   xsum = "FF"
+
   # 2 bytes ID, 2 bytes c0 00, 2 bytes length, n bytes data, 1 byte xsum
   numel_xsum = 12 + lengths[i_cmd].hex
 
@@ -182,6 +186,7 @@ while i_cmd < num_cmds
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
     i = i + 2
   end
+  
   # puts "xsum for cmd #{i_cmd} is #{xsum}"
   str_data[xsum_indx[i_cmd], 2] = xsum
   i_cmd = i_cmd + 1
