@@ -1,12 +1,12 @@
 # ATS Table Generator
-# Generates Table File to test ATS capability, calculates and replaces checksum and time
+# Generates Table File to test ATS capability, calculates and replaces checksum
 # Author: Jacqueline Smedley
 # Created :11/02/21
 # Last Modified: 12/10/21
 require 'date'
 require 'io/console'
 
-############################## calculates start time given current time and offset###############
+############ calculates start time given current time and offset##############
 def calc_start_time(time_delay)
   hours = time_delay[0, 2].to_i
   minutes = time_delay[3, 2].to_i
@@ -14,21 +14,23 @@ def calc_start_time(time_delay)
   time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds
 
   # puts "TIME_NOW is #{Time.now.to_i}"
-  # puts "The first ATS command will run at #{time_offset.to_i}"
+  puts "The first ATS command will run at #{Time.at(time_offset)}"
+
   return time_offset
 end
-#################################################################################################
+##############################################################################
 
-#################### converts input time to epoch time in 32-bit seconds#########################
+############ converts input time to epoch time in 32-bit seconds #############
 # parameter is start time object
 def conv_epoch(input_time)
-  # (input time in seconds since 1970 - 1980 unix timestamp), gives input time in seconds since Jan 1st 1980 epoch
+  # (input time in seconds since 1970 - 1980 unix timestamp), gives input time 
+  # in seconds since Jan 1st 1980 epoch
   epoch_year = 1980
   epoch_day = 01
   epoch_month = 01
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day).to_i
   gmt_offset = 18000
-  calc_time = input_time.to_i - epoch_offset + gmt_offset #time diff between telemetry and tool
+  calc_time = input_time.to_i - epoch_offset + gmt_offset 
 
   #use following line instead of other calc_time for unix epoch (1970)
   #calc_time = input_time.to_i
@@ -41,11 +43,12 @@ def conv_epoch(input_time)
   # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
   # puts "Epoch start time in raw seconds: #{calc_time}"
   # puts "Epoch start time in hex: #{time_hex}"
+
   return time_hex
 end
-#################################################################################################
+##############################################################################
 
-#################### writes hex contents of file to string ######################################
+################# writes hex contents of file to string ######################
 def hex_file_to_str(fname)
   #read the binary
   file_in = File.binread(fname)
@@ -61,20 +64,21 @@ def hex_file_to_str(fname)
   hex_file_scan.each do |byte|
     data += byte
   end  
+
   return data
 end
-#################################################################################################
+##############################################################################
 
-#################### writes hex string to binary file ######################################
+#################### writes hex string to binary file ########################
 def hex_str_to_bin(str_in, filename_out)
   packed = Array(str_in).pack('H*')
   File.binwrite(filename_out, packed)
 end
-#################################################################################################
+##############################################################################
 
-############# generates an array of n timestamps a given amount of seconds apart ################
-# inputs are number of timestamps to be generated, interval between each timestamp, and the start
-# timestamp (output of conv_epoch method)
+# generates an array of n timestamps a given amount of seconds apart #####
+# inputs are number of timestamps to be generated, interval between each time
+# stamp, and the start timestamp (output of conv_epoch method)
 def gen_timestamps(num_cmds, seconds_apart, start_time_object)
   i = 0
   times_array = []
@@ -86,9 +90,10 @@ def gen_timestamps(num_cmds, seconds_apart, start_time_object)
   end
 
   puts "Command execution times: #{times_array}"
+
   return times_array
 end
-#################################################################################################
+##############################################################################
 
 time_invalid = 1
 filename_invalid = 1
@@ -123,7 +128,8 @@ while time_invalid == 1
     time_converted = conv_epoch(input_time)
     time_invalid = 0
   else
-    puts "INVALID FORMAT. Please try again (single digits should have leading zeros)"
+    puts "INVALID FORMAT. Please try again (single digits should have leading 
+    zeros)"
   end
 end
 
@@ -186,7 +192,7 @@ while i_cmd < num_cmds
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
     i = i + 2
   end
-  
+
   # puts "xsum for cmd #{i_cmd} is #{xsum}"
   str_data[xsum_indx[i_cmd], 2] = xsum
   i_cmd = i_cmd + 1
