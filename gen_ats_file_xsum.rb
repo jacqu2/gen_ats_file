@@ -14,7 +14,7 @@ def calc_start_time(time_delay)
   time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds
 
   # puts "TIME_NOW is #{Time.now.to_i}"
-  puts "The first ATS command will run at #{Time.at(time_offset)}"
+  puts "The first ATS command will run at #{Time.at(time_offset).utc}"
 
   return time_offset
 end
