@@ -32,9 +32,6 @@ def conv_epoch(input_time)
   gmt_offset = 18000
   calc_time = input_time.to_i - epoch_offset + gmt_offset 
 
-  #use following line instead of other calc_time for unix epoch (1970)
-  #calc_time = input_time.to_i
-
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
 
@@ -76,7 +73,7 @@ def hex_str_to_bin(str_in, filename_out)
 end
 ##############################################################################
 
-# generates an array of n timestamps a given amount of seconds apart #####
+##### generates an array of n timestamps a given amount of seconds apart #####
 # inputs are number of timestamps to be generated, interval between each time
 # stamp, and the start timestamp (output of conv_epoch method)
 def gen_timestamps(num_cmds, seconds_apart, start_time_object)
@@ -103,7 +100,7 @@ while filename_invalid == 1
   file_in = gets.chomp
 
   #check for valid time format
-  if !File.exist?('sc_ats1.tbl')
+  if !File.exist?(file_in)
     puts "ERROR: File does not exist, please try again"  
   else
     filename_invalid = 0
