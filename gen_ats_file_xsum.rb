@@ -110,8 +110,7 @@ end
 #save hex contents of file to string
 str_data = hex_file_to_str(file_in)
 
-# file_out = file_in + "-r1"
-file_out = "sc_ats1.tbl-r1"
+file_out = file_in + "-r1"
 
 while time_invalid == 1
   puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
