@@ -110,7 +110,8 @@ end
 #save hex contents of file to string
 str_data = hex_file_to_str(file_in)
 
-file_out = file_in + "-r1"
+# file_out = file_in + "-r1"
+file_out = "sc_ats1.tbl-r1"
 
 while time_invalid == 1
   puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
@@ -150,9 +151,10 @@ while(1)
     len_indx[i] = next_cmd_indx + 18
     lengths[i] = str_data[len_indx[i], 4]
     len = str_data[len_indx[i], 4].hex + 1
-    xsum_indx[i] = len_indx[i] + 4 + ((len * 2) - 2)
-    next_cmd_indx = xsum_indx[i] + 4
+    xsum_indx[i] = len_indx[i] + 6
+    next_cmd_indx = len_indx[i] + ((len * 2) - 2) + 8
     next_cmd_num = (next_cmd_num.hex + 1).to_s
+    puts "next cmd in file: #{str_data[next_cmd_indx, 2]} at indx #{next_cmd_indx}"
     i = i + 1
     num_cmds = num_cmds + 1
   else
