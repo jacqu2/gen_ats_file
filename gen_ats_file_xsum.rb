@@ -121,9 +121,18 @@ end
 while(1)
   if str_data[next_cmd_indx, 2].hex.to_i == next_cmd_num.to_i
     time_indx[i] = next_cmd_indx + 2
+
+    # check if time is 4 bytes
+    if str_data[time_indx[i] + 4, 2] == "18"
+      puts "---------------------------------------------------------------------------------------"
+      puts "WARNING: Time may not be 4 bytes, detected time in file is #{str_data[time_indx[i], 8]}"
+      puts "---------------------------------------------------------------------------------------"
+    end
+
     len_indx[i] = next_cmd_indx + 18
     lengths[i] = str_data[len_indx[i], 4]
     len = str_data[len_indx[i], 4].hex + 1
+    puts "raw length: #{str_data[len_indx[i], 4]}"
     xsum_indx[i] = len_indx[i] + 6
     next_cmd_indx = len_indx[i] + ((len * 2) - 2) + 8
     next_cmd_num = (next_cmd_num.hex + 1).to_s
@@ -140,12 +149,19 @@ time_btwn_cmds = gets.chomp
 
 # generate timestamps
 timestamps_array = gen_timestamps(num_cmds, time_btwn_cmds.to_i, input_time)
+
+puts str_data[200, 700]
+
 # replace times in string, calculate each checksum
 array_indx = 0
 time_indx.each do |index|
   i = 0
   str_data[index, 8] = timestamps_array[array_indx].to_s
+  array_indx = array_indx + 1
 end
+
+puts str_data[200, 700]
+
 # calculate checksum for each command
 i_cmd = 0
 while i_cmd < num_cmds
@@ -157,6 +173,11 @@ while i_cmd < num_cmds
   while i <= numel_xsum
     # puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
+
+    if xsum.length < 2
+      xsum = "0" + xsum
+    end
+    
     i = i + 2
   end
   # puts "xsum for cmd #{i_cmd} is #{xsum}"
