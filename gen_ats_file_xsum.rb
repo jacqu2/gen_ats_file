@@ -150,6 +150,7 @@ array_indx = 0
 time_indx.each do |index|
   i = 0
   str_data[index, 8] = timestamps_array[array_indx].to_s
+  array_indx = array_indx + 1
 end
 # calculate checksum for each command
 i_cmd = 0
