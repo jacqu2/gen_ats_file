@@ -128,9 +128,9 @@ while(1)
     lengths[i] = str_data[len_indx[i], 4]
     len = str_data[len_indx[i], 4].hex + 1
     puts "len is #{str_data[len_indx[i], 4]} + 1, #{len}"
-    xsum_indx[i] = len_indx[i] + 4 + ((len * 2) - 2)
+    xsum_indx[i] = len_indx[i] + 6
     puts "xsum indx #{i} is #{xsum_indx[i]}"
-    next_cmd_indx = xsum_indx[i] + 4
+    next_cmd_indx = len_indx[i] + 4 + ((len * 2) - 2) + 4
     next_cmd_num = (next_cmd_num.hex + 1).to_s
     puts "next cmd in file: #{str_data[next_cmd_indx, 2]} at indx #{next_cmd_indx}"
     i = i + 1
