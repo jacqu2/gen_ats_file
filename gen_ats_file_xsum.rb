@@ -32,15 +32,15 @@ def conv_epoch(input_time)
   epoch_sec = 55
   epoch_us = 816
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day, epoch_hr, epoch_min, epoch_sec, epoch_us).to_i
-  gmt_offset = 18000
+  gmt_offset_1980 = 18000
   calc_time = input_time.to_i - epoch_offset # + gmt_offset 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
-  # puts "Readable Time (unix): #{debug}"
-  # puts "Unix start time in raw seconds: #{input_time.to_i}"
-  # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
-  # puts "Epoch start time in raw seconds: #{calc_time}"
-  # puts "Epoch start time in hex: #{time_hex}"
+   puts "Readable Time (unix): #{debug}"
+   puts "Unix start time in raw seconds: #{input_time.to_i}"
+   puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
+   puts "Epoch start time in raw seconds: #{calc_time}"
+   puts "Epoch start time in hex: #{time_hex}"
 
   return time_hex
 
