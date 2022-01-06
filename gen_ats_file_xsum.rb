@@ -32,8 +32,12 @@ def conv_epoch(input_time)
   epoch_sec = 55
   epoch_us = 816
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day, epoch_hr, epoch_min, epoch_sec, epoch_us).to_i
-  gmt_offset_1980 = 18000
-  calc_time = input_time.to_i - epoch_offset # + gmt_offset 
+  offset_1980 = 18000
+  offset_j2000 = 17986
+
+  # modify this line if changing epoch
+  calc_time = input_time.to_i - epoch_offset + offset_j2000
+
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
    puts "Readable Time (unix): #{debug}"
