@@ -33,10 +33,10 @@ def conv_epoch(input_time)
   epoch_us = 816
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day, epoch_hr, epoch_min, epoch_sec, epoch_us).to_i
   offset_1980 = 18000
-  offset_j2000 = offset_1980 + 18858
+  offset_j2000 = 1893491975
 
   # modify this line if changing epoch
-  calc_time = input_time.to_i + epoch_offset + offset_j2000
+  calc_time = input_time.to_i + epoch_offset - offset_j2000
 
   # 1980
   # calc_time = input_time.to_i + offset_1980 + epoch_offset
