@@ -39,7 +39,7 @@ def conv_epoch(input_time)
   calc_time = input_time.to_i + epoch_offset + offset_j2000
 
   # 1980
-  calc_time = input_time.to_i + offset_1980 + epoch_offset
+  # calc_time = input_time.to_i + offset_1980 + epoch_offset
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
