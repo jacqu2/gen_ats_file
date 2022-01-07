@@ -39,7 +39,7 @@ def conv_epoch(input_time)
   # calc_time = input_time.to_i + epoch_offset - offset_j2000
 
   # hard coded for j2000
-  calc_time = input_time.to_i
+  calc_time = input_time.to_i - 946727998
 
   # 1980
   # calc_time = input_time.to_i + offset_1980 + epoch_offset
