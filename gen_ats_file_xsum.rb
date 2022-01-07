@@ -33,21 +33,21 @@ def conv_epoch(input_time)
   epoch_us = 816
   epoch_offset = Time.new(epoch_year, epoch_month, epoch_day, epoch_hr, epoch_min, epoch_sec, epoch_us).to_i
   offset_1980 = 18000
-  offset_j2000 = 1893491975
+  offset_j2000 = 1893491975 + 36857
 
   # modify this line if changing epoch
-  calc_time = input_time.to_i + epoch_offset - offset_j2000 + 36857
+  calc_time = input_time.to_i + epoch_offset - offset_j2000
 
   # 1980
   # calc_time = input_time.to_i + offset_1980 + epoch_offset
 
   time_hex = calc_time.to_s(16)
   debug = Time.at(calc_time)
-   puts "Readable Time (unix): #{debug}"
-   puts "Unix start time in raw seconds: #{input_time.to_i}"
-   puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
-   puts "Epoch start time in raw seconds: #{calc_time}"
-   puts "Epoch start time in hex: #{time_hex}"
+  # puts "Readable Time (unix): #{debug}"
+  # puts "Unix start time in raw seconds: #{input_time.to_i}"
+  # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
+  # puts "Epoch start time in raw seconds: #{calc_time}"
+  # puts "Epoch start time in hex: #{time_hex}"
 
   return time_hex
 
@@ -159,6 +159,7 @@ while(1)
     len = str_data[len_indx[i], 4].hex + 1
     # puts "raw length: #{str_data[len_indx[i], 4]}"
     xsum_indx[i] = len_indx[i] + 6
+    str_data[xsum_indx[i], 2] = "00"
     next_cmd_indx = len_indx[i] + ((len * 2) - 2) + 8
     next_cmd_num = (next_cmd_num.hex + 1).to_s
     # puts "next cmd in file: #{str_data[next_cmd_indx, 2]} at indx #{next_cmd_indx}"
@@ -195,8 +196,8 @@ while i_cmd < num_cmds
   numel_xsum = 12 + lengths[i_cmd].hex
 
   # xor all bits from ID to checksum
-  while i <= numel_xsum
-    # puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
+  while i <= numel_xsum + 1
+     puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
 
     if xsum.length < 2
@@ -206,10 +207,9 @@ while i_cmd < num_cmds
     i = i + 2
   end
 
-  # puts "xsum for cmd #{i_cmd} is #{xsum}"
   str_data[xsum_indx[i_cmd], 2] = xsum
   i_cmd = i_cmd + 1
-  # puts "checksum #{i_cmd}: #{xsum}"
+   puts "checksum #{i_cmd}: #{xsum}"
 end
 
 array = str_data.split("")
