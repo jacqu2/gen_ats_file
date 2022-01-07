@@ -199,8 +199,8 @@ while i_cmd < num_cmds
   numel_xsum = 12 + lengths[i_cmd].hex
 
   # xor all bits from ID to checksum
-  while i <= numel_xsum + 1
-     puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}"
+  while i <= numel_xsum + 3
+     puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}, numel: #{numel_xsum + 2}"
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
 
     if xsum.length < 2
