@@ -195,11 +195,13 @@ i_cmd = 0
 while i_cmd < num_cmds
   i = 0
   xsum = "FF"
+
   # 2 bytes ID, 2 bytes c0 00, 2 bytes length, n bytes data, 1 byte xsum
-  numel_xsum = 12 + lengths[i_cmd].hex
+  numel_xsum = 12 + (lengths[i_cmd].hex * 2)
+  puts numel_xsum
 
   # xor all bits from ID to checksum
-  while i <= numel_xsum + 3
+  while i <= numel_xsum
      puts "xor-ing #{xsum} and #{str_data[(time_indx[i_cmd] + 8 + i), 2]}, numel: #{numel_xsum + 2}"
     xsum = (xsum.to_i(16) ^ str_data[(time_indx[i_cmd] + 8 + i), 2].to_i(16)).to_s(16) 
 
