@@ -5,19 +5,25 @@
 # Last Modified: 01/11/22
 require 'date'
 require 'io/console'
+require 'time'
+
 ############ calculates start time given current time and offset##############
-def calc_start_time(time_delay)
-  hours = time_delay[0, 2].to_i
-  minutes = time_delay[3, 2].to_i
-  seconds = time_delay[6, 2].to_i + 10
-  time_offset = Time.now.to_i + hours*60*60 + minutes*60 + seconds
-  # puts "TIME_NOW is #{Time.now.to_i}"
+def calc_start_time(time_delay, user_choice)
+  time_parsed = Time.parse(time_delay)
+
+  if user_choice == "0"
+    time_offset = Time.now.to_i + time_parsed.hour*60*60 + time_parsed.min*60 + time_parsed.sec
+  else 
+    time_offset = Time.new(Time.now.year, Time.now.month, Time.now.day, time_parsed.hour, time_parsed.min, time_parsed.sec)
+  end
+  
   puts "The first ATS command will run at #{Time.at(time_offset)} EST (#{Time.at(time_offset).utc}) "
 
   return time_offset
 
 end
 ##############################################################################
+
 ############ converts input time to epoch time in 32-bit seconds #############
 # parameter is start time object
 def conv_epoch(input_time)
@@ -52,6 +58,7 @@ def conv_epoch(input_time)
 
 end
 ##############################################################################
+
 ################# writes hex contents of file to string ######################
 def hex_file_to_str(fname)
   # read the binary
@@ -70,12 +77,14 @@ def hex_file_to_str(fname)
 
 end
 ##############################################################################
+
 #################### writes hex string to binary file ########################
 def hex_str_to_bin(str_in, filename_out)
   packed = Array(str_in).pack('H*')
   File.binwrite(filename_out, packed)
 end
 ##############################################################################
+
 ##### generates an array of n timestamps a given amount of seconds apart #####
 # inputs are number of timestamps to be generated, interval between each time
 # stamp, and the start timestamp (output of conv_epoch method)
@@ -93,9 +102,12 @@ def gen_timestamps(num_cmds, seconds_apart, start_time_object)
 
 end
 ##############################################################################
+
 time_invalid = 1
 filename_invalid = 1
+choice_invalid = 1
 
+# get input filename
 while filename_invalid == 1
   puts "please enter filename (.tbl file): "
   file_in = gets.chomp
@@ -113,23 +125,24 @@ end
 str_data = hex_file_to_str(file_in)
 file_out = file_in + "-r1"
 
-while time_invalid == 1
-  puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
-  time_offset = gets.chomp
+while choice_invalid == 1
+  puts "Enter '1' if you would like to input exact time for first command to start."
+  puts "Enter '0' if you would like to input the length of delay before first command starts:"
+  user_choice = gets.chomp
 
-  # check for valid time format
-  if (time_offset.length == "HH:MM:SS".length)
-    # parse input and convert to timestamp
-    input_time = calc_start_time(time_offset)
-    # epoch and hex time conversion
-    time_converted = conv_epoch(input_time)
-    time_invalid = 0
-  else
-    puts "INVALID FORMAT. Please try again (single digits should have leading 
-    zeros)"
+  if user_choice == "1"
+    puts "What date/time would you like the first ATS command to start? (MM/DD/YYYY HH:MM:SS): "
+    choice_invalid = 0
+  elsif user_choice == "0"
+    puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
+    choice_invalid = 0
   end
 
 end
+
+time_offset = gets.chomp  
+input_time = calc_start_time(time_offset, user_choice)
+time_converted = conv_epoch(input_time)
 
 # find location of each cmd
 time_indx = []
