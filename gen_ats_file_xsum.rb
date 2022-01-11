@@ -2,7 +2,7 @@
 # Generates Table File to test ATS capability, calculates and replaces checksum
 # Author: Jacqueline Smedley
 # Created :11/02/21
-# Last Modified: 12/10/21
+# Last Modified: 01/11/22
 require 'date'
 require 'io/console'
 ############ calculates start time given current time and offset##############
@@ -24,19 +24,15 @@ def conv_epoch(input_time)
   # (input time in seconds since 1970 - 1980 unix timestamp), gives input time 
   # 1980: January 1, 1980, 00:00:00 UTC
   # j2000: January 1, 2000, 11:58:55.816 UTC
-  epoch_year = 2000
-  epoch_day = 01
-  epoch_month = 01
-  epoch_hr = 11
-  epoch_min = 58
-  epoch_sec = 55
-  epoch_us = 816
-  epoch_offset = Time.new(epoch_year, epoch_month, epoch_day, epoch_hr, epoch_min, epoch_sec, epoch_us).to_i
-  offset_1980 = 18000
-  offset_j2000 = 1893491975 + 36857
-
-  # modify this line if changing epoch
-  # calc_time = input_time.to_i + epoch_offset - offset_j2000
+  # epoch_year = 2000
+  # epoch_day = 01
+  # epoch_month = 01
+  # epoch_hr = 11
+  # epoch_min = 58
+  # epoch_sec = 55
+  # epoch_us = 816
+  # epoch_offset = Time.new(epoch_year, epoch_month, epoch_day, epoch_hr, epoch_min, epoch_sec, epoch_us).to_i
+  # offset_1980 = 18000
 
   # hard coded for j2000
   calc_time = input_time.to_i - 946727998
@@ -45,7 +41,7 @@ def conv_epoch(input_time)
   # calc_time = input_time.to_i + offset_1980 + epoch_offset
 
   time_hex = calc_time.to_s(16)
-  debug = Time.at(calc_time)
+  # debug = Time.at(calc_time)
   # puts "Readable Time (unix): #{debug}"
   # puts "Unix start time in raw seconds: #{input_time.to_i}"
   # puts "Unix start time in hex: #{input_time.to_i.to_s(16)}"
@@ -58,20 +54,19 @@ end
 ##############################################################################
 ################# writes hex contents of file to string ######################
 def hex_file_to_str(fname)
-  #read the binary
+  # read the binary
   file_in = File.binread(fname)
-  #convert to hex
-  hex_file = file_in.unpack('H*')[0]
-  bin_str = file_in.unpack('B*')[0]
-  hex_file_scan = hex_file.scan /.{1,2}/
-  #save to string
-  i = 0
-  data = ''
-  hex_file_scan.each do |byte|
-    data += byte
-  end  
 
-  return data
+  # convert to hex
+  hex_file = file_in.unpack('H*')[0]
+
+  # hex_file_scan = hex_file.scan /.{1,2}/
+  # data = ''
+  # hex_file_scan.each do |byte|
+  #   data += byte
+  # end  
+
+  return hex_file
 
 end
 ##############################################################################
@@ -100,16 +95,20 @@ end
 ##############################################################################
 time_invalid = 1
 filename_invalid = 1
+
 while filename_invalid == 1
   puts "please enter filename (.tbl file): "
   file_in = gets.chomp
+
   # check for valid time format
   if !File.exist?(file_in)
     puts "ERROR: File does not exist, please try again"  
   else
     filename_invalid = 0
   end
+
 end
+
 # save hex contents of file to string
 str_data = hex_file_to_str(file_in)
 file_out = file_in + "-r1"
