@@ -6,7 +6,6 @@
 require 'date'
 require 'io/console'
 require 'time'
-require 'active_support/time'
 
 ############ calculates start time given current time and offset##############
 def calc_start_time(time_delay, user_choice)
@@ -16,10 +15,10 @@ def calc_start_time(time_delay, user_choice)
   if user_choice == "0"
     time_offset = Time.now.to_i + time_parsed.hour*60*60 + time_parsed.min*60 + time_parsed.sec
   else 
-    time_offset = Time.new(time_parsed.year, time_parsed.month, time_parsed.day, time_parsed.hour, time_parsed.min, time_parsed.sec) - 5.to_i.hours
+    time_offset = Time.new(time_parsed.year, time_parsed.month, time_parsed.day, time_parsed.hour, time_parsed.min, time_parsed.sec) - 5*60*60
   end
   
-  puts "The first ATS command will run at #{Time.at(time_offset).utc}, (#{Time.at(time_offset)})"
+  puts "The first ATS command will run at #{Time.at(time_offset).utc}, (#{Time.at(time_offset)}) EST"
 
   return time_offset
 
