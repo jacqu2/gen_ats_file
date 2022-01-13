@@ -98,7 +98,7 @@ def gen_timestamps(num_cmds, seconds_apart, start_time_object)
     times_array[i] = conv_epoch(start_time_object + seconds_apart*(i + 1))
     i = i + 1
   end
-  # puts "Command execution times: #{times_array}"
+  puts "Command execution times: #{times_array}"
 
   return times_array
 
