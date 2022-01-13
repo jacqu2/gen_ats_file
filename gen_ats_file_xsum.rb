@@ -9,16 +9,16 @@ require 'time'
 
 ############ calculates start time given current time and offset##############
 def calc_start_time(time_delay, user_choice)
-  puts "Time now is #{Time.now}"
+  # puts "Time now is #{Time.now}"
   time_parsed = Time.parse(time_delay)
 
   if user_choice == "0"
     time_offset = Time.now.to_i + time_parsed.hour*60*60 + time_parsed.min*60 + time_parsed.sec
   else 
-    time_offset = Time.new(Time.now.year, Time.now.month, Time.now.day, time_parsed.hour, time_parsed.min, time_parsed.sec)
+    time_offset = Time.new(time_parsed.year, time_parsed.month, time_parsed.day, time_parsed.hour, time_parsed.min, time_parsed.sec).utc
   end
   
-  puts "The first ATS command will run at #{Time.at(time_offset)} EST (#{Time.at(time_offset).utc}) "
+  puts "The first ATS command will run at #{Time.at(time_offset)} UTC"
 
   return time_offset
 
@@ -43,7 +43,6 @@ def conv_epoch(input_time)
 
   # hard coded for j2000
   calc_time = input_time.to_i - 946727998
-  puts "Time now: #{Time.now}"
 
   # 1980
   # calc_time = input_time.to_i + offset_1980 + epoch_offset
