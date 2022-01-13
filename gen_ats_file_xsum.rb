@@ -9,6 +9,7 @@ require 'time'
 
 ############ calculates start time given current time and offset##############
 def calc_start_time(time_delay, user_choice)
+  puts "Time now is #{Time.now}"
   time_parsed = Time.parse(time_delay)
 
   if user_choice == "0"
@@ -42,6 +43,7 @@ def conv_epoch(input_time)
 
   # hard coded for j2000
   calc_time = input_time.to_i - 946727998
+  puts "Time now: #{Time.now}"
 
   # 1980
   # calc_time = input_time.to_i + offset_1980 + epoch_offset
@@ -131,7 +133,7 @@ while choice_invalid == 1
   user_choice = gets.chomp
 
   if user_choice == "1"
-    puts "What date/time would you like the first ATS command to start? (MM/DD/YYYY HH:MM:SS): "
+    puts "What date/time would you like the first ATS command to start? (YYYY-MM-DD HH:MM:SS): "
     choice_invalid = 0
   elsif user_choice == "0"
     puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
