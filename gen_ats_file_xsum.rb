@@ -9,14 +9,37 @@ require 'time'
 
 ############ calculates start time given current time and offset##############
 def calc_start_time(time_delay, user_choice)
-  # puts "Time now is #{Time.now}"
-  time_parsed = Time.parse(time_delay)
+  valid_input = 0
 
   if user_choice == "0"
+    time_parsed = Time.parse(time_delay)
     time_offset = Time.now.to_i + time_parsed.hour*60*60 + time_parsed.min*60 + time_parsed.sec
   else 
-    time_offset = Time.new(time_parsed.year, time_parsed.month, time_parsed.day, time_parsed.hour, time_parsed.min, time_parsed.sec) - 5*60*60
+    # check date input format
+    if time_delay[2] == '/' || time_delay[5] == '/'
+      time_delay = time_delay[6, 4] + "-" + time_delay[0, 2] + "-" + time_delay[3, 2] + time_delay[10..]
+      valid_input = 1
+    # YYYYMM-DD
+    elsif time_delay[4] != "-" && time_delay[6] == '-'
+      time_delay = time_delay[0, 4] + "-" + time_delay[4, 2] + "-" + time_delay[7, 2]  + time_delay[9..]
+      valid_input = 1
+    # YYYY-MMDD
+    elsif time_delay[7] != "-" && time_delay[4] == '-'
+      time_delay = time_delay[0, 4] + "-" + time_delay[5, 2] + "-" + time_delay[7, 2] + time_delay[9..]
+      valid_input = 1
+    # YYYYMMDD
+    elsif !time_delay.include? '-'
+      time_delay = time_delay[0, 4] + "-" + time_delay[4, 2] + "-" + time_delay[6, 2] + time_delay[8..]
+      valid_input = 1
+    else 
+      puts "ERROR: INVALID INPUT FORMAT. The program will automatically run in 2 minutes."
+      time_delay = Time.now + 2*60
+    end
   end
+
+  puts time_delay
+  time_parsed = Time.parse(time_delay)
+  time_offset = Time.new(time_parsed.year, time_parsed.month, time_parsed.day, time_parsed.hour, time_parsed.min, time_parsed.sec) - 5*60*60
   
   puts "The first ATS command will run at #{Time.at(time_offset).utc}, (#{Time.at(time_offset)}) EST"
 
@@ -137,8 +160,9 @@ while choice_invalid == 1
   elsif user_choice == "0"
     puts "How long would you like to wait for the first ATS command? (HH:MM:SS): "
     choice_invalid = 0
+  else
+    puts "INVALID CHOICE. Please enter 0 or 1: "    
   end
-
 end
 
 time_offset = gets.chomp  
