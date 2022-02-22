@@ -2,7 +2,7 @@
 # Generates Table File to test ATS capability, calculates and replaces checksum
 # Author: Jacqueline Smedley
 # Created :11/02/21
-# Last Modified: 01/11/22
+# Last Modified: 02/22/2022
 require 'date'
 require 'io/console'
 require 'time'
@@ -18,15 +18,15 @@ def calc_start_time(time_delay, user_choice)
     time_delay = time_delay.gsub /\s/, '0'
     # check date input format
     if time_delay[2] == '/' || time_delay[5] == '/'
-      time_delay = time_delay[6, 4] + "-" + time_delay[0, 2] + "-" + time_delay[3, 2] + " " + time_delay[10..]
+      time_delay = time_delay[6, 4] + "-" + time_delay[0, 2] + "-" + time_delay[3, 2] + " " + time_delay[10..-1]
       valid_input = 1
     # YYYYMM-DD
     elsif time_delay[4] != "-" && time_delay[6] == '-'
-      time_delay = time_delay[0, 4] + "-" + time_delay[4, 2] + "-" + time_delay[7, 2]  + " " + time_delay[9..]
+      time_delay = time_delay[0, 4] + "-" + time_delay[4, 2] + "-" + time_delay[7, 2]  + " " + time_delay[9..-1]
       valid_input = 1
     # YYYY-MMDD
     elsif time_delay[7] != "-" && time_delay[4] == '-'
-      time_delay = time_delay[0, 4] + "-" + time_delay[5, 2] + "-" + time_delay[7, 2] + " " + time_delay[9..]
+      time_delay = time_delay[0, 4] + "-" + time_delay[5, 2] + "-" + time_delay[7, 2] + " " + time_delay[9..-1]
       valid_input = 1
     elsif (!time_delay.include? ':') || (!time_delay.include? '-')
       puts "ERROR: INVALID INPUT FORMAT. The program will automatically run in 2 minutes."
